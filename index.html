@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Fun ZanDKav</title>
+    <style>
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
+            background-size: 400% 400%;
+            animation: gradient 15s ease infinite;
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            color: #333;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            text-align: center;
+        }
+
+        h1 {
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            animation: rainbow 5s linear infinite;
+        }
+
+        @keyframes rainbow {
+            0% { color: #ff0000; }
+            16% { color: #ff7f00; }
+            33% { color: #ffff00; }
+            50% { color: #00ff00; }
+            66% { color: #0000ff; }
+            83% { color: #4b0082; }
+            100% { color: #9400d3; }
+        }
+
+        .btn {
+            background-color: #ff6b6b;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 16px;
+            cursor: pointer;
+            margin: 10px;
+            transition: all 0.3s;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+            background-color: #ff8e8e;
+        }
+
+        .btn:active {
+            transform: translateY(1px);
+        }
+
+        .nav {
+            display: flex;
+            justify-content: center;
+            margin: 30px 0;
+        }
+
+        .nav-item {
+            margin: 0 15px;
+            padding: 10px 20px;
+            background-color: rgba(255,255,255,0.7);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.9);
+            transform: scale(1.05);
+        }
+
+        .content {
+            background-color: rgba(255,255,255,0.8);
+            border-radius: 20px;
+            padding: 20px;
+            margin-top: 20px;
+            min-height: 300px;
+            display: none;
+        }
+
+        .active {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        #linkResult {
+            margin-top: 20px;
+            word-break: break-all;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+        }
+
+        #videoResult {
+            margin-top: 20px;
+        }
+
+        .input-field {
+            width: 80%;
+            padding: 12px;
+            border-radius: 50px;
+            border: 2px solid #ddd;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+
+        .whatsapp-join {
+            margin-top: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .whatsapp-logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+
+        .login-form {
+            display: none;
+            background-color: rgba(255,255,255,0.9);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        .login-input {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Selamat Datang!</h1>
+        
+        <button id="loginBtn" class="btn">Masuk</button>
+        
+        <div id="loginForm" class="login-form">
+            <input type="text" placeholder="Username" class="login-input">
+            <input type="password" placeholder="Password" class="login-input">
+            <button class="btn">Login</button>
+        </div>
+        
+        <div class="nav">
+            <div class="nav-item" data-target="upload">Upload Gambar</div>
+            <div class="nav-item" data-target="tiktok">Download Video TikTok</div>
+            <div class="nav-item" data-target="instagram">Download Video IG</div>
+        </div>
+        
+        <div id="upload" class="content">
+            <h2>Upload Gambar Anda</h2>
+            <button id="uploadBtn" class="btn">Pilih Gambar dari Galeri</button>
+            <input type="file" id="fileInput" accept="image/*" style="display: none;">
+            <div id="linkResult"></div>
+        </div>
+        
+        <div id="tiktok" class="content">
+            <h2>Download Video TikTok</h2>
+            <input type="text" id="tiktokUrl" class="input-field" placeholder="Tempel link TikTok di sini">
+            <button id="downloadTiktok" class="btn">Download Video</button>
+            <div id="videoResult"></div>
+        </div>
+        
+        <div id="instagram" class="content">
+            <h2>Download Video Instagram</h2>
+            <input type="text" id="instagramUrl" class="input-field" placeholder="Tempel link Instagram di sini">
+            <button id="downloadInstagram" class="btn">Download Video</button>
+            <div id="instagramResult"></div>
+        </div>
+        
+        <div class="whatsapp-join">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-logo">
+            <a href="https://whatsapp.com/channel/0029Vaqe6AA5PO13FUcYkJ3b" target="_blank">Join Channel Kami</a>
+        </div>
+    </div>
+
+    <script>
+        // Login button
+        document.getElementById('loginBtn').addEventListener('click', function() {
+            const loginForm = document.getElementById('loginForm');
+            if (loginForm.style.display === 'block') {
+                loginForm.style.display = 'none';
+            } else {
+                loginForm.style.display = 'block';
+            }
+        });
+
+        // Navigation
+        const navItems = document.querySelectorAll('.nav-item');
+        const contents = document.querySelectorAll('.content');
+        
+        navItems.forEach(item => {
+            item.addEventListener('click', function() {
+                const target = this.getAttribute('data-target');
+                
+                contents.forEach(content => {
+                    content.classList.remove('active');
+                });
+                
+                document.getElementById(target).classList.add('active');
+            });
+        });
+
+        // Upload gambar
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            document.getElementById('fileInput').click();
+        });
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            if (file) {
+                // Simulasi upload ke catbox.com
+                setTimeout(() => {
+                    const randomId = Math.random().toString(36).substring(2, 10);
+                    const fakeLink = `https://catbox.com/${randomId}`;
+                    document.getElementById('linkResult').innerHTML = `
+                        <p>Gambar berhasil diupload!</p>
+                        <p>Link gambar Anda: <a href="${fakeLink}" target="_blank">${fakeLink}</a></p>
+                        <p>Salin link ini untuk berbagi dengan orang lain.</p>
+                    `;
+                }, 1500);
+            }
+        });
+
+        // Download TikTok
+        document.getElementById('downloadTiktok').addEventListener('click', function() {
+            const url = document.getElementById('tiktokUrl').value;
+            if (!url) {
+                alert('Silakan masukkan link TikTok terlebih dahulu');
+                return;
+            }
+            
+            // Simulasi download
+            document.getElementById('videoResult').innerHTML = `
+                <p>Video sedang diproses...</p>
+                <div style="height: 20px; background: linear-gradient(90deg, #ff6b6b, #ff8e8e); border-radius: 10px; animation: progress 2s infinite;"></div>
+                <style>
+                    @keyframes progress {
+                        0% { background-position: 0% 50%; }
+                        100% { background-position: 100% 50%; }
+                    }
+                </style>
+            `;
+            
+            setTimeout(() => {
+                document.getElementById('videoResult').innerHTML = `
+                    <p>Video berhasil didownload!</p>
+                    <p>Video telah disimpan di galeri Anda.</p>
+                    <button class="btn">Buka Galeri</button>
+                `;
+            }, 3000);
+        });
+
+        // Download Instagram
+        document.getElementById('downloadInstagram').addEventListener('click', function() {
+            const url = document.getElementById('instagramUrl').value;
+            if (!url) {
+                alert('Silakan masukkan link Instagram terlebih dahulu');
+                return;
+            }
+            
+            // Simulasi download
+            document.getElementById('instagramResult').innerHTML = `
+                <p>Video Instagram sedang diproses...</p>
+                <div style="height: 20px; background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045); border-radius: 10px; animation: progress 2s infinite;"></div>
+            `;
+            
+            setTimeout(() => {
+                document.getElementById('instagramResult').innerHTML = `
+                    <p>Video Instagram berhasil didownload!</p>
+                    <p>Video telah disimpan di galeri Anda.</p>
+                    <button class="btn">Buka Galeri</button>
+                `;
+            }, 3000);
+        });
+
+        // Aktifkan tab pertama
+        document.querySelector('.nav-item').click();
+    </script>
+</body>
+</html>
