@@ -1,316 +1,632 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Fun ZanDKav</title>
+    <title>ZanDKav AI - Platform Unggah & Download Cerdas</title>
     <style>
-        body {
-            font-family: 'Comic Sans MS', cursive, sans-serif;
-            background: linear-gradient(45deg, #ff9a9e, #fad0c4, #fbc2eb, #a6c1ee);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
-            margin: 0;
-            padding: 0;
-            min-height: 100vh;
-            color: #333;
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --dark-color: #1a1a2e;
+            --light-color: #f8f9fa;
         }
 
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--light-color);
+            color: var(--dark-color);
+            transition: all 0.3s ease;
         }
 
         .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-            text-align: center;
-        }
-
-        h1 {
-            color: #fff;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-            animation: rainbow 5s linear infinite;
-        }
-
-        @keyframes rainbow {
-            0% { color: #ff0000; }
-            16% { color: #ff7f00; }
-            33% { color: #ffff00; }
-            50% { color: #00ff00; }
-            66% { color: #0000ff; }
-            83% { color: #4b0082; }
-            100% { color: #9400d3; }
-        }
-
-        .btn {
-            background-color: #ff6b6b;
-            color: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-size: 16px;
-            cursor: pointer;
-            margin: 10px;
-            transition: all 0.3s;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
-            background-color: #ff8e8e;
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .nav {
             display: flex;
-            justify-content: center;
-            margin: 30px 0;
+            min-height: 100vh;
+        }
+
+        /* Sidebar Navigation */
+        .sidebar {
+            width: 250px;
+            background: linear-gradient(135deg, var(--dark-color), #16213e);
+            color: white;
+            padding: 20px 0;
+            position: fixed;
+            height: 100vh;
+            transform: translateX(-100%);
+            transition: transform 0.3s ease;
+            z-index: 100;
+        }
+
+        .sidebar.active {
+            transform: translateX(0);
+        }
+
+        .logo {
+            text-align: center;
+            padding: 20px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .logo h2 {
+            color: white;
+            font-size: 1.5rem;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .nav-menu {
+            list-style: none;
         }
 
         .nav-item {
-            margin: 0 15px;
-            padding: 10px 20px;
-            background-color: rgba(255,255,255,0.7);
-            border-radius: 10px;
+            padding: 15px 25px;
             cursor: pointer;
             transition: all 0.3s;
+            display: flex;
+            align-items: center;
         }
 
         .nav-item:hover {
-            background-color: rgba(255,255,255,0.9);
-            transform: scale(1.05);
+            background-color: rgba(255,255,255,0.1);
         }
 
-        .content {
-            background-color: rgba(255,255,255,0.8);
-            border-radius: 20px;
+        .nav-item i {
+            margin-right: 10px;
+            font-size: 1.2rem;
+        }
+
+        .nav-item.active {
+            background-color: var(--primary-color);
+            border-left: 4px solid var(--accent-color);
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
             padding: 20px;
-            margin-top: 20px;
-            min-height: 300px;
-            display: none;
+            margin-left: 0;
+            transition: margin-left 0.3s;
         }
 
-        .active {
+        .main-content.shifted {
+            margin-left: 250px;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            margin-bottom: 30px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .menu-toggle {
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: var(--dark-color);
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+
+        .menu-toggle span {
+            display: block;
+            width: 25px;
+            height: 3px;
+            background-color: var(--dark-color);
+            transition: all 0.3s;
+        }
+
+        .menu-toggle.active span:nth-child(1) {
+            transform: rotate(45deg) translate(5px, 5px);
+        }
+
+        .menu-toggle.active span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-toggle.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(5px, -5px);
+        }
+
+        .auth-btn {
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .auth-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            margin-bottom: 30px;
+        }
+
+        .content-section.active {
             display: block;
             animation: fadeIn 0.5s;
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        #linkResult {
-            margin-top: 20px;
-            word-break: break-all;
-            padding: 10px;
-            background-color: #f0f0f0;
+        .section-title {
+            margin-bottom: 20px;
+            color: var(--dark-color);
+            font-size: 1.5rem;
+            position: relative;
+            padding-bottom: 10px;
+        }
+
+        .section-title::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        }
+
+        /* Upload Section */
+        .upload-area {
+            border: 2px dashed #ccc;
+            padding: 40px;
+            text-align: center;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .upload-area:hover {
+            border-color: var(--primary-color);
+            background-color: rgba(58, 134, 255, 0.05);
+        }
+
+        .upload-icon {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 15px;
+        }
+
+        .upload-btn {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
             border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            margin-top: 15px;
         }
 
-        #videoResult {
-            margin-top: 20px;
+        .upload-btn:hover {
+            background-color: #2a75e6;
         }
 
-        .input-field {
-            width: 80%;
-            padding: 12px;
-            border-radius: 50px;
-            border: 2px solid #ddd;
-            font-size: 16px;
-            margin: 10px 0;
+        /* Download Section */
+        .download-form {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
-        .whatsapp-join {
-            margin-top: 40px;
+        .url-input {
+            flex: 1;
+            padding: 12px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 1rem;
+        }
+
+        .download-btn {
+            background-color: var(--accent-color);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .download-btn:hover {
+            background-color: #e0005e;
+        }
+
+        /* Result Section */
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 5px;
+            background-color: #f8f9fa;
+            display: none;
+        }
+
+        .result-title {
+            margin-bottom: 15px;
+            font-weight: 500;
+        }
+
+        .download-link {
+            display: inline-block;
+            margin-top: 10px;
+            color: var(--primary-color);
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+
+        .download-link:hover {
+            text-decoration: underline;
+        }
+
+        /* WhatsApp Channel */
+        .whatsapp-channel {
             display: flex;
             align-items: center;
-            justify-content: center;
-        }
-
-        .whatsapp-logo {
-            width: 30px;
-            height: 30px;
-            margin-right: 10px;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-
-        .login-form {
-            display: none;
-            background-color: rgba(255,255,255,0.9);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-        }
-
-        .login-input {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
+            margin-top: 40px;
+            padding: 15px;
+            background-color: rgba(37, 211, 102, 0.1);
             border-radius: 5px;
-            border: 1px solid #ddd;
+            text-decoration: none;
+            color: var(--dark-color);
+            transition: all 0.3s;
+        }
+
+        .whatsapp-channel:hover {
+            background-color: rgba(37, 211, 102, 0.2);
+        }
+
+        .whatsapp-icon {
+            font-size: 1.5rem;
+            color: #25D366;
+            margin-right: 10px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .sidebar {
+                width: 200px;
+            }
+            .main-content.shifted {
+                margin-left: 200px;
+            }
+            .download-form {
+                flex-direction: column;
+            }
         }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <h1>Selamat Datang!</h1>
-        
-        <button id="loginBtn" class="btn">Masuk</button>
-        
-        <div id="loginForm" class="login-form">
-            <input type="text" placeholder="Username" class="login-input">
-            <input type="password" placeholder="Password" class="login-input">
-            <button class="btn">Login</button>
+        <!-- Sidebar Navigation -->
+        <div class="sidebar">
+            <div class="logo">
+                <h2>ZanDKav AI</h2>
+            </div>
+            <ul class="nav-menu">
+                <li class="nav-item active" data-target="upload">
+                    <i class="fas fa-cloud-upload-alt"></i>
+                    <span>Unggah Gambar</span>
+                </li>
+                <li class="nav-item" data-target="tiktok">
+                    <i class="fab fa-tiktok"></i>
+                    <span>Download TikTok</span>
+                </li>
+                <li class="nav-item" data-target="instagram">
+                    <i class="fab fa-instagram"></i>
+                    <span>Download Instagram</span>
+                </li>
+            </ul>
         </div>
-        
-        <div class="nav">
-            <div class="nav-item" data-target="upload">Upload Gambar</div>
-            <div class="nav-item" data-target="tiktok">Download Video TikTok</div>
-            <div class="nav-item" data-target="instagram">Download Video IG</div>
-        </div>
-        
-        <div id="upload" class="content">
-            <h2>Upload Gambar Anda</h2>
-            <button id="uploadBtn" class="btn">Pilih Gambar dari Galeri</button>
-            <input type="file" id="fileInput" accept="image/*" style="display: none;">
-            <div id="linkResult"></div>
-        </div>
-        
-        <div id="tiktok" class="content">
-            <h2>Download Video TikTok</h2>
-            <input type="text" id="tiktokUrl" class="input-field" placeholder="Tempel link TikTok di sini">
-            <button id="downloadTiktok" class="btn">Download Video</button>
-            <div id="videoResult"></div>
-        </div>
-        
-        <div id="instagram" class="content">
-            <h2>Download Video Instagram</h2>
-            <input type="text" id="instagramUrl" class="input-field" placeholder="Tempel link Instagram di sini">
-            <button id="downloadInstagram" class="btn">Download Video</button>
-            <div id="instagramResult"></div>
-        </div>
-        
-        <div class="whatsapp-join">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/6/6b/WhatsApp.svg" alt="WhatsApp" class="whatsapp-logo">
-            <a href="https://whatsapp.com/channel/0029Vaqe6AA5PO13FUcYkJ3b" target="_blank">Join Channel Kami</a>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Header -->
+            <div class="header">
+                <div class="menu-toggle">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                <button class="auth-btn" id="accessBtn">Akses Platform</button>
+            </div>
+
+            <!-- Upload Image Section -->
+            <div class="content-section active" id="upload">
+                <h2 class="section-title">Unggah Gambar</h2>
+                <p>Unggah gambar Anda dan dapatkan link yang dapat dibagikan secara instan.</p>
+                
+                <div class="upload-area" id="uploadArea">
+                    <div class="upload-icon">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                    </div>
+                    <h3>Seret dan lepas gambar di sini</h3>
+                    <p>atau</p>
+                    <button class="upload-btn">Pilih File</button>
+                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
+                </div>
+
+                <div class="result-container" id="uploadResult">
+                    <h3 class="result-title">Gambar Berhasil Diunggah!</h3>
+                    <p>Link gambar Anda:</p>
+                    <a href="#" class="download-link" id="imageLink" target="_blank"></a>
+                    <button class="upload-btn" id="copyLinkBtn" style="margin-top: 15px;">
+                        <i class="fas fa-copy"></i> Salin Link
+                    </button>
+                </div>
+            </div>
+
+            <!-- TikTok Download Section -->
+            <div class="content-section" id="tiktok">
+                <h2 class="section-title">Download Video TikTok</h2>
+                <p>Tempelkan link video TikTok di bawah ini untuk mengunduhnya tanpa watermark.</p>
+                
+                <div class="download-form">
+                    <input type="text" class="url-input" id="tiktokUrl" placeholder="https://www.tiktok.com/@username/video/123456789">
+                    <button class="download-btn" id="downloadTiktokBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+
+                <div class="result-container" id="tiktokResult">
+                    <h3 class="result-title">Video Siap Diunduh!</h3>
+                    <p>Klik link di bawah ini untuk mengunduh video:</p>
+                    <a href="#" class="download-link" id="tiktokDownloadLink" download></a>
+                </div>
+            </div>
+
+            <!-- Instagram Download Section -->
+            <div class="content-section" id="instagram">
+                <h2 class="section-title">Download Video Instagram</h2>
+                <p>Tempelkan link video Instagram di bawah ini untuk mengunduhnya tanpa watermark.</p>
+                
+                <div class="download-form">
+                    <input type="text" class="url-input" id="instagramUrl" placeholder="https://www.instagram.com/p/ABC123/">
+                    <button class="download-btn" id="downloadInstagramBtn">
+                        <i class="fas fa-download"></i> Download
+                    </button>
+                </div>
+
+                <div class="result-container" id="instagramResult">
+                    <h3 class="result-title">Video Siap Diunduh!</h3>
+                    <p>Klik link di bawah ini untuk mengunduh video:</p>
+                    <a href="#" class="download-link" id="instagramDownloadLink" download></a>
+                </div>
+            </div>
+
+            <!-- WhatsApp Channel -->
+            <a href="https://whatsapp.com/channel/0029Vaqe6AA5PO13FUcYkJ3b" target="_blank" class="whatsapp-channel">
+                <div class="whatsapp-icon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div>
+                    <h3>Bergabung dengan Channel Kami</h3>
+                    <p>Dapatkan update terbaru tentang ZanDKav AI</p>
+                </div>
+            </a>
         </div>
     </div>
 
     <script>
-        // Login button
-        document.getElementById('loginBtn').addEventListener('click', function() {
-            const loginForm = document.getElementById('loginForm');
-            if (loginForm.style.display === 'block') {
-                loginForm.style.display = 'none';
-            } else {
-                loginForm.style.display = 'block';
-            }
+        // Toggle Sidebar
+        const menuToggle = document.querySelector('.menu-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        const mainContent = document.querySelector('.main-content');
+        const accessBtn = document.getElementById('accessBtn');
+
+        menuToggle.addEventListener('click', () => {
+            menuToggle.classList.toggle('active');
+            sidebar.classList.toggle('active');
+            mainContent.classList.toggle('shifted');
+        });
+
+        // Access Button - Direct to first section
+        accessBtn.addEventListener('click', () => {
+            // Show the platform by opening the sidebar and showing first section
+            menuToggle.classList.add('active');
+            sidebar.classList.add('active');
+            mainContent.classList.add('shifted');
+            
+            // Activate first nav item
+            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
+            document.querySelector('.nav-item').classList.add('active');
+            
+            // Show first content section
+            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
+            document.getElementById('upload').classList.add('active');
         });
 
         // Navigation
         const navItems = document.querySelectorAll('.nav-item');
-        const contents = document.querySelectorAll('.content');
         
         navItems.forEach(item => {
             item.addEventListener('click', function() {
                 const target = this.getAttribute('data-target');
                 
-                contents.forEach(content => {
-                    content.classList.remove('active');
-                });
+                // Update active nav item
+                navItems.forEach(navItem => navItem.classList.remove('active'));
+                this.classList.add('active');
                 
+                // Show corresponding content section
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active');
+                });
                 document.getElementById(target).classList.add('active');
+                
+                // Close sidebar on mobile
+                if (window.innerWidth <= 768) {
+                    menuToggle.classList.remove('active');
+                    sidebar.classList.remove('active');
+                    mainContent.classList.remove('shifted');
+                }
             });
         });
 
-        // Upload gambar
-        document.getElementById('uploadBtn').addEventListener('click', function() {
-            document.getElementById('fileInput').click();
+        // Upload Image Functionality
+        const uploadArea = document.getElementById('uploadArea');
+        const fileInput = document.getElementById('fileInput');
+        const uploadResult = document.getElementById('uploadResult');
+        const imageLink = document.getElementById('imageLink');
+        const copyLinkBtn = document.getElementById('copyLinkBtn');
+
+        uploadArea.addEventListener('click', () => {
+            fileInput.click();
         });
 
-        document.getElementById('fileInput').addEventListener('change', function(e) {
+        fileInput.addEventListener('change', function(e) {
             const file = e.target.files[0];
             if (file) {
-                // Simulasi upload ke catbox.com
+                // Show loading state
+                uploadArea.innerHTML = `
+                    <div class="upload-icon">
+                        <i class="fas fa-spinner fa-spin"></i>
+                    </div>
+                    <h3>Mengunggah gambar...</h3>
+                `;
+                
+                // Simulate upload process
                 setTimeout(() => {
+                    // Generate random link (in real app, this would be from your backend)
                     const randomId = Math.random().toString(36).substring(2, 10);
-                    const fakeLink = `https://catbox.com/${randomId}`;
-                    document.getElementById('linkResult').innerHTML = `
-                        <p>Gambar berhasil diupload!</p>
-                        <p>Link gambar Anda: <a href="${fakeLink}" target="_blank">${fakeLink}</a></p>
-                        <p>Salin link ini untuk berbagi dengan orang lain.</p>
+                    const fakeLink = `https://zandkav-ai.cdn/${randomId}.${file.name.split('.').pop()}`;
+                    
+                    // Show result
+                    uploadArea.innerHTML = `
+                        <div class="upload-icon">
+                            <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
+                        </div>
+                        <h3>Unggahan Berhasil!</h3>
+                        <p>Klik untuk mengunggah gambar lain</p>
+                        <button class="upload-btn">Unggah Lagi</button>
                     `;
-                }, 1500);
+                    
+                    // Show the link
+                    imageLink.textContent = fakeLink;
+                    imageLink.href = fakeLink;
+                    uploadResult.style.display = 'block';
+                }, 2000);
             }
         });
 
-        // Download TikTok
-        document.getElementById('downloadTiktok').addEventListener('click', function() {
-            const url = document.getElementById('tiktokUrl').value;
+        // Copy Link Button
+        copyLinkBtn.addEventListener('click', () => {
+            const link = imageLink.href;
+            navigator.clipboard.writeText(link).then(() => {
+                copyLinkBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
+                setTimeout(() => {
+                    copyLinkBtn.innerHTML = '<i class="fas fa-copy"></i> Salin Link';
+                }, 2000);
+            });
+        });
+
+        // TikTok Download Functionality
+        const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
+        const tiktokResult = document.getElementById('tiktokResult');
+        const tiktokDownloadLink = document.getElementById('tiktokDownloadLink');
+
+        downloadTiktokBtn.addEventListener('click', () => {
+            const url = document.getElementById('tiktokUrl').value.trim();
+            
             if (!url) {
                 alert('Silakan masukkan link TikTok terlebih dahulu');
                 return;
             }
             
-            // Simulasi download
-            document.getElementById('videoResult').innerHTML = `
-                <p>Video sedang diproses...</p>
-                <div style="height: 20px; background: linear-gradient(90deg, #ff6b6b, #ff8e8e); border-radius: 10px; animation: progress 2s infinite;"></div>
-                <style>
-                    @keyframes progress {
-                        0% { background-position: 0% 50%; }
-                        100% { background-position: 100% 50%; }
-                    }
-                </style>
-            `;
+            // Validate URL (simple check)
+            if (!url.includes('tiktok.com')) {
+                alert('Link TikTok tidak valid');
+                return;
+            }
             
+            // Show loading state
+            downloadTiktokBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            
+            // Simulate download process
             setTimeout(() => {
-                document.getElementById('videoResult').innerHTML = `
-                    <p>Video berhasil didownload!</p>
-                    <p>Video telah disimpan di galeri Anda.</p>
-                    <button class="btn">Buka Galeri</button>
-                `;
-            }, 3000);
+                // Generate download link (in real app, this would be from your API)
+                const videoId = url.split('/').pop();
+                const downloadUrl = `https://zandkav-ai.download/tiktok/${videoId}.mp4`;
+                
+                // Show result
+                tiktokDownloadLink.textContent = `Download Video TikTok (${videoId}.mp4)`;
+                tiktokDownloadLink.href = downloadUrl;
+                tiktokResult.style.display = 'block';
+                
+                // Reset button
+                downloadTiktokBtn.innerHTML = '<i class="fas fa-download"></i> Download';
+            }, 2500);
         });
 
-        // Download Instagram
-        document.getElementById('downloadInstagram').addEventListener('click', function() {
-            const url = document.getElementById('instagramUrl').value;
+        // Instagram Download Functionality
+        const downloadInstagramBtn = document.getElementById('downloadInstagramBtn');
+        const instagramResult = document.getElementById('instagramResult');
+        const instagramDownloadLink = document.getElementById('instagramDownloadLink');
+
+        downloadInstagramBtn.addEventListener('click', () => {
+            const url = document.getElementById('instagramUrl').value.trim();
+            
             if (!url) {
                 alert('Silakan masukkan link Instagram terlebih dahulu');
                 return;
             }
             
-            // Simulasi download
-            document.getElementById('instagramResult').innerHTML = `
-                <p>Video Instagram sedang diproses...</p>
-                <div style="height: 20px; background: linear-gradient(90deg, #833ab4, #fd1d1d, #fcb045); border-radius: 10px; animation: progress 2s infinite;"></div>
-            `;
+            // Validate URL (simple check)
+            if (!url.includes('instagram.com')) {
+                alert('Link Instagram tidak valid');
+                return;
+            }
             
+            // Show loading state
+            downloadInstagramBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            
+            // Simulate download process
             setTimeout(() => {
-                document.getElementById('instagramResult').innerHTML = `
-                    <p>Video Instagram berhasil didownload!</p>
-                    <p>Video telah disimpan di galeri Anda.</p>
-                    <button class="btn">Buka Galeri</button>
-                `;
-            }, 3000);
+                // Generate download link (in real app, this would be from your API)
+                const postId = url.split('/').filter(part => part).pop();
+                const downloadUrl = `https://zandkav-ai.download/instagram/${postId}.mp4`;
+                
+                // Show result
+                instagramDownloadLink.textContent = `Download Video Instagram (${postId}.mp4)`;
+                instagramDownloadLink.href = downloadUrl;
+                instagramResult.style.display = 'block';
+                
+                // Reset button
+                downloadInstagramBtn.innerHTML = '<i class="fas fa-download"></i> Download';
+            }, 2500);
         });
 
-        // Aktifkan tab pertama
+        // Initialize first section
         document.querySelector('.nav-item').click();
     </script>
 </body>
