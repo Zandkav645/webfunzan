@@ -4,13 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ZanDKav AI - Platform Unggah & Download Cerdas</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         :root {
-            --primary-color: #3a86ff;
-            --secondary-color: #8338ec;
-            --accent-color: #ff006e;
-            --dark-color: #1a1a2e;
-            --light-color: #f8f9fa;
+            --primary: #8a2be2;
+            --secondary: #5e17eb;
+            --accent: #ff3e80;
+            --dark: #1a1a2e;
+            --light: #f8f9fa;
+            --success: #00c853;
+            --warning: #ff9800;
+            --error: #f44336;
         }
 
         * {
@@ -21,153 +25,179 @@
         }
 
         body {
-            background-color: var(--light-color);
-            color: var(--dark-color);
-            transition: all 0.3s ease;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #fff;
+            min-height: 100vh;
+            padding: 20px;
         }
 
         .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
             display: flex;
-            min-height: 100vh;
-        }
-
-        /* Sidebar Navigation */
-        .sidebar {
-            width: 250px;
-            background: linear-gradient(135deg, var(--dark-color), #16213e);
-            color: white;
-            padding: 20px 0;
-            position: fixed;
-            height: 100vh;
-            transform: translateX(-100%);
-            transition: transform 0.3s ease;
-            z-index: 100;
-        }
-
-        .sidebar.active {
-            transform: translateX(0);
-        }
-
-        .logo {
-            text-align: center;
+            justify-content: space-between;
+            align-items: center;
             padding: 20px 0;
             margin-bottom: 30px;
             border-bottom: 1px solid rgba(255,255,255,0.1);
         }
 
-        .logo h2 {
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .logo h1 {
+            font-size: 2rem;
+            background: linear-gradient(to right, var(--accent), var(--primary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            font-weight: 700;
+        }
+
+        .logo-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+        }
+
+        .nav {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: rgba(255,255,255,0.1);
             color: white;
-            font-size: 1.5rem;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+            border: none;
+            padding: 10px 20px;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
+        }
+
+        .nav-btn i {
+            font-size: 1.2rem;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-top: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: all 0.4s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(138, 43, 226, 0.4);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .card-icon {
+            font-size: 2.5rem;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        .nav-menu {
-            list-style: none;
+        .card-title {
+            font-size: 1.8rem;
+            font-weight: 600;
         }
 
-        .nav-item {
-            padding: 15px 25px;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            align-items: center;
+        .input-group {
+            margin-bottom: 20px;
         }
 
-        .nav-item:hover {
-            background-color: rgba(255,255,255,0.1);
-        }
-
-        .nav-item i {
-            margin-right: 10px;
-            font-size: 1.2rem;
-        }
-
-        .nav-item.active {
-            background-color: var(--primary-color);
-            border-left: 4px solid var(--accent-color);
-        }
-
-        /* Main Content */
-        .main-content {
-            flex: 1;
-            padding: 20px;
-            margin-left: 0;
-            transition: margin-left 0.3s;
-        }
-
-        .main-content.shifted {
-            margin-left: 250px;
-        }
-
-        /* Header */
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            margin-bottom: 30px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .menu-toggle {
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--dark-color);
-            display: flex;
-            flex-direction: column;
-            gap: 5px;
-        }
-
-        .menu-toggle span {
+        .input-label {
             display: block;
-            width: 25px;
-            height: 3px;
-            background-color: var(--dark-color);
+            margin-bottom: 10px;
+            font-weight: 500;
+        }
+
+        .url-input {
+            width: 100%;
+            padding: 15px 20px;
+            background: rgba(0,0,0,0.2);
+            border: 2px solid rgba(255,255,255,0.1);
+            border-radius: 10px;
+            color: white;
+            font-size: 1rem;
             transition: all 0.3s;
         }
 
-        .menu-toggle.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
+        .url-input:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(138, 43, 226, 0.3);
         }
 
-        .menu-toggle.active span:nth-child(2) {
-            opacity: 0;
-        }
-
-        .menu-toggle.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(5px, -5px);
-        }
-
-        .auth-btn {
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
+        .download-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white;
             border: none;
-            padding: 10px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .auth-btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-        }
-
-        /* Content Sections */
-        .content-section {
-            display: none;
-            background-color: white;
-            padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 30px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
         }
 
-        .content-section.active {
-            display: block;
+        .download-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(138, 43, 226, 0.4);
+        }
+
+        .download-btn:active {
+            transform: translateY(1px);
+        }
+
+        .result-container {
+            margin-top: 30px;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            display: none;
             animation: fadeIn 0.5s;
         }
 
@@ -176,458 +206,613 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .section-title {
-            margin-bottom: 20px;
-            color: var(--dark-color);
-            font-size: 1.5rem;
-            position: relative;
-            padding-bottom: 10px;
-        }
-
-        .section-title::after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 50px;
-            height: 3px;
-            background: linear-gradient(to right, var(--primary-color), var(--secondary-color));
-        }
-
-        /* Upload Section */
-        .upload-area {
-            border: 2px dashed #ccc;
-            padding: 40px;
-            text-align: center;
-            border-radius: 10px;
-            margin-bottom: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .upload-area:hover {
-            border-color: var(--primary-color);
-            background-color: rgba(58, 134, 255, 0.05);
-        }
-
-        .upload-icon {
-            font-size: 3rem;
-            color: var(--primary-color);
-            margin-bottom: 15px;
-        }
-
-        .upload-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-            margin-top: 15px;
-        }
-
-        .upload-btn:hover {
-            background-color: #2a75e6;
-        }
-
-        /* Download Section */
-        .download-form {
+        .result-header {
             display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-        }
-
-        .url-input {
-            flex: 1;
-            padding: 12px 15px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            font-size: 1rem;
-        }
-
-        .download-btn {
-            background-color: var(--accent-color);
-            color: white;
-            border: none;
-            padding: 12px 25px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-
-        .download-btn:hover {
-            background-color: #e0005e;
-        }
-
-        /* Result Section */
-        .result-container {
-            margin-top: 30px;
-            padding: 20px;
-            border-radius: 5px;
-            background-color: #f8f9fa;
-            display: none;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
         }
 
         .result-title {
-            margin-bottom: 15px;
-            font-weight: 500;
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent);
         }
 
-        .download-link {
-            display: inline-block;
-            margin-top: 10px;
-            color: var(--primary-color);
-            text-decoration: none;
+        .video-preview {
+            width: 100%;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 20px 0;
+            background: #000;
+            aspect-ratio: 9/16;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .video-preview video {
+            max-width: 100%;
+            max-height: 100%;
+        }
+
+        .video-info {
+            margin: 15px 0;
+        }
+
+        .video-info-item {
+            display: flex;
+            margin-bottom: 10px;
+        }
+
+        .info-label {
+            width: 120px;
             font-weight: 500;
+            color: #ccc;
+        }
+
+        .info-value {
+            flex: 1;
+            word-break: break-all;
+        }
+
+        .download-options {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+
+        .download-option {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
             transition: all 0.3s;
         }
 
-        .download-link:hover {
-            text-decoration: underline;
+        .download-option:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-3px);
         }
 
-        /* WhatsApp Channel */
+        .quality {
+            font-weight: 600;
+            color: var(--accent);
+        }
+
+        .size {
+            font-size: 0.9rem;
+            color: #aaa;
+        }
+
+        .loader {
+            display: none;
+            text-align: center;
+            padding: 30px;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(255,255,255,0.1);
+            border-top: 5px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
         .whatsapp-channel {
             display: flex;
             align-items: center;
-            margin-top: 40px;
+            gap: 15px;
+            background: rgba(37, 211, 102, 0.1);
             padding: 15px;
-            background-color: rgba(37, 211, 102, 0.1);
-            border-radius: 5px;
+            border-radius: 10px;
+            margin-top: 40px;
             text-decoration: none;
-            color: var(--dark-color);
+            color: white;
             transition: all 0.3s;
         }
 
         .whatsapp-channel:hover {
-            background-color: rgba(37, 211, 102, 0.2);
+            background: rgba(37, 211, 102, 0.2);
+            transform: translateY(-3px);
         }
 
         .whatsapp-icon {
-            font-size: 1.5rem;
+            font-size: 2rem;
             color: #25D366;
-            margin-right: 10px;
         }
 
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 200px;
-            }
-            .main-content.shifted {
-                margin-left: 200px;
-            }
-            .download-form {
-                flex-direction: column;
-            }
+        .channel-text h3 {
+            font-size: 1.3rem;
+            margin-bottom: 5px;
+        }
+
+        .channel-text p {
+            color: #aaa;
+        }
+
+        .api-notice {
+            background: rgba(255, 152, 0, 0.1);
+            border-left: 4px solid var(--warning);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .api-notice a {
+            color: var(--accent);
+            text-decoration: none;
+        }
+
+        .api-config {
+            background: rgba(58, 134, 255, 0.1);
+            border-left: 4px solid var(--primary);
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .config-input {
+            width: 100%;
+            padding: 10px 15px;
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 5px;
+            color: white;
+            margin: 10px 0;
+        }
+
+        .save-btn {
+            background: var(--success);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+
+        .api-status {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 5px;
+            background: rgba(0, 0, 0, 0.3);
+            font-size: 0.9rem;
+        }
+
+        .status-connected {
+            color: var(--success);
+        }
+
+        .status-disconnected {
+            color: var(--error);
         }
     </style>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 </head>
 <body>
     <div class="container">
-        <!-- Sidebar Navigation -->
-        <div class="sidebar">
+        <header>
             <div class="logo">
-                <h2>ZanDKav AI</h2>
+                <i class="fas fa-robot logo-icon"></i>
+                <h1>ZanDKav AI</h1>
             </div>
-            <ul class="nav-menu">
-                <li class="nav-item active" data-target="upload">
-                    <i class="fas fa-cloud-upload-alt"></i>
-                    <span>Unggah Gambar</span>
-                </li>
-                <li class="nav-item" data-target="tiktok">
-                    <i class="fab fa-tiktok"></i>
-                    <span>Download TikTok</span>
-                </li>
-                <li class="nav-item" data-target="instagram">
-                    <i class="fab fa-instagram"></i>
-                    <span>Download Instagram</span>
-                </li>
-            </ul>
+            <div class="nav">
+                <button class="nav-btn" id="uploadBtn">
+                    <i class="fas fa-cloud-upload-alt"></i> Unggah Gambar
+                </button>
+                <button class="nav-btn" id="whatsappBtn">
+                    <i class="fab fa-whatsapp"></i> Join Channel
+                </button>
+            </div>
+        </header>
+
+        <div class="api-notice">
+            <strong>API Key RapidAPI Terintegrasi!</strong> Sistem menggunakan API key yang Anda berikan untuk mengakses layanan download video.
         </div>
 
-        <!-- Main Content -->
+        <div class="api-config">
+            <h3>API Key RapidAPI</h3>
+            <input type="text" class="config-input" id="rapidapiKey" value="745b4a3c50mshbc2980922b46606p1f409ejsn8c86e66f331a" readonly>
+            
+            <div class="api-status">
+                Status: <span class="status-connected" id="apiStatus">Terhubung ke RapidAPI</span>
+            </div>
+        </div>
+
         <div class="main-content">
-            <!-- Header -->
-            <div class="header">
-                <div class="menu-toggle">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-                <button class="auth-btn" id="accessBtn">Akses Platform</button>
-            </div>
-
-            <!-- Upload Image Section -->
-            <div class="content-section active" id="upload">
-                <h2 class="section-title">Unggah Gambar ke Catbox</h2>
-                <p>Unggah gambar Anda dan dapatkan link Catbox yang dapat dibagikan.</p>
-                
-                <div class="upload-area" id="uploadArea">
-                    <div class="upload-icon">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                    </div>
-                    <h3>Seret dan lepas gambar di sini</h3>
-                    <p>atau</p>
-                    <button class="upload-btn">Pilih File</button>
-                    <input type="file" id="fileInput" accept="image/*" style="display: none;">
-                </div>
-
-                <div class="result-container" id="uploadResult">
-                    <h3 class="result-title">Gambar Berhasil Diunggah ke Catbox!</h3>
-                    <p>Link gambar Anda:</p>
-                    <a href="#" class="download-link" id="imageLink" target="_blank"></a>
-                    <button class="upload-btn" id="copyLinkBtn" style="margin-top: 15px;">
-                        <i class="fas fa-copy"></i> Salin Link
-                    </button>
-                </div>
-            </div>
-
             <!-- TikTok Download Section -->
-            <div class="content-section" id="tiktok">
-                <h2 class="section-title">Download TikTok via Snaptik</h2>
-                <p>Tempelkan link video TikTok di bawah ini untuk mengunduhnya tanpa watermark melalui Snaptik.</p>
-                
-                <div class="download-form">
-                    <input type="text" class="url-input" id="tiktokUrl" placeholder="https://www.tiktok.com/@username/video/123456789">
-                    <button class="download-btn" id="downloadTiktokBtn">
-                        <i class="fas fa-download"></i> Download via Snaptik
-                    </button>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fab fa-tiktok card-icon"></i>
+                    <h2 class="card-title">Download Video TikTok</h2>
                 </div>
-
+                <div class="input-group">
+                    <label class="input-label">Tempel link video TikTok:</label>
+                    <input type="text" class="url-input" id="tiktokUrl" placeholder="https://www.tiktok.com/@username/video/123456789">
+                </div>
+                <button class="download-btn" id="downloadTiktokBtn">
+                    <i class="fas fa-download"></i> Download Video
+                </button>
+                
+                <div class="loader" id="tiktokLoader">
+                    <div class="spinner"></div>
+                    <p>Mengambil data video...</p>
+                </div>
+                
                 <div class="result-container" id="tiktokResult">
-                    <h3 class="result-title">Video Siap Diunduh!</h3>
-                    <p>Klik link di bawah ini untuk mengunduh video melalui Snaptik:</p>
-                    <a href="#" class="download-link" id="tiktokDownloadLink" target="_blank"></a>
+                    <div class="result-header">
+                        <h3 class="result-title">Video Siap Diunduh!</h3>
+                    </div>
+                    
+                    <div class="video-preview" id="tiktokPreview">
+                        <video controls>
+                            <source src="" type="video/mp4">
+                            Browser Anda tidak mendukung tag video.
+                        </video>
+                    </div>
+                    
+                    <div class="video-info">
+                        <div class="video-info-item">
+                            <span class="info-label">Judul:</span>
+                            <span class="info-value" id="tiktokTitle">Video TikTok</span>
+                        </div>
+                        <div class="video-info-item">
+                            <span class="info-label">Pembuat:</span>
+                            <span class="info-value" id="tiktokAuthor">@username</span>
+                        </div>
+                    </div>
+                    
+                    <div class="download-options" id="tiktokOptions">
+                        <!-- Options will be generated by JS -->
+                    </div>
                 </div>
             </div>
 
             <!-- Instagram Download Section -->
-            <div class="content-section" id="instagram">
-                <h2 class="section-title">Download Instagram via Snaptik</h2>
-                <p>Tempelkan link video Instagram di bawah ini untuk mengunduhnya tanpa watermark melalui Snaptik.</p>
-                
-                <div class="download-form">
-                    <input type="text" class="url-input" id="instagramUrl" placeholder="https://www.instagram.com/p/ABC123/">
-                    <button class="download-btn" id="downloadInstagramBtn">
-                        <i class="fas fa-download"></i> Download via Snaptik
-                    </button>
+            <div class="card">
+                <div class="card-header">
+                    <i class="fab fa-instagram card-icon"></i>
+                    <h2 class="card-title">Download Video Instagram</h2>
                 </div>
-
+                <div class="input-group">
+                    <label class="input-label">Tempel link video Instagram:</label>
+                    <input type="text" class="url-input" id="instagramUrl" placeholder="https://www.instagram.com/p/ABC123/">
+                </div>
+                <button class="download-btn" id="downloadInstagramBtn">
+                    <i class="fas fa-download"></i> Download Video
+                </button>
+                
+                <div class="loader" id="instagramLoader">
+                    <div class="spinner"></div>
+                    <p>Mengambil data video...</p>
+                </div>
+                
                 <div class="result-container" id="instagramResult">
-                    <h3 class="result-title">Video Siap Diunduh!</h3>
-                    <p>Klik link di bawah ini untuk mengunduh video melalui Snaptik:</p>
-                    <a href="#" class="download-link" id="instagramDownloadLink" target="_blank"></a>
+                    <div class="result-header">
+                        <h3 class="result-title">Video Siap Diunduh!</h3>
+                    </div>
+                    
+                    <div class="video-preview" id="instagramPreview">
+                        <video controls>
+                            <source src="" type="video/mp4">
+                            Browser Anda tidak mendukung tag video.
+                        </video>
+                    </div>
+                    
+                    <div class="video-info">
+                        <div class="video-info-item">
+                            <span class="info-label">Judul:</span>
+                            <span class="info-value" id="instagramTitle">Video Instagram</span>
+                        </div>
+                        <div class="video-info-item">
+                            <span class="info-label">Pembuat:</span>
+                            <span class="info-value" id="instagramAuthor">@username</span>
+                        </div>
+                    </div>
+                    
+                    <div class="download-options" id="instagramOptions">
+                        <!-- Options will be generated by JS -->
+                    </div>
                 </div>
             </div>
-
-            <!-- WhatsApp Channel -->
-            <a href="https://whatsapp.com/channel/0029Vaqe6AA5PO13FUcYkJ3b" target="_blank" class="whatsapp-channel">
-                <div class="whatsapp-icon">
-                    <i class="fab fa-whatsapp"></i>
-                </div>
-                <div>
-                    <h3>Bergabung dengan Channel Kami</h3>
-                    <p>Dapatkan update terbaru tentang ZanDKav AI</p>
-                </div>
-            </a>
         </div>
+
+        <a href="https://whatsapp.com/channel/0029Vaqe6AA5PO13FUcYkJ3b" target="_blank" class="whatsapp-channel">
+            <i class="fab fa-whatsapp whatsapp-icon"></i>
+            <div class="channel-text">
+                <h3>Bergabung dengan Channel Kami</h3>
+                <p>Dapatkan update terbaru tentang ZanDKav AI</p>
+            </div>
+        </a>
     </div>
 
     <script>
-        // Toggle Sidebar
-        const menuToggle = document.querySelector('.menu-toggle');
-        const sidebar = document.querySelector('.sidebar');
-        const mainContent = document.querySelector('.main-content');
-        const accessBtn = document.getElementById('accessBtn');
+        // ========================
+        // KONFIGURASI API
+        // ========================
+        const RAPIDAPI_KEY = "745b4a3c50mshbc2980922b46606p1f409ejsn8c86e66f331a";
+        const IMGBB_API_KEY = "d36eb659137bae9a2c8ab5d5b0d6b9d0"; // Contoh API key ImgBB
 
-        menuToggle.addEventListener('click', () => {
-            menuToggle.classList.toggle('active');
-            sidebar.classList.toggle('active');
-            mainContent.classList.toggle('shifted');
-        });
+        // ========================
+        // DOM ELEMENTS
+        // ========================
+        const tiktokUrlInput = document.getElementById('tiktokUrl');
+        const instagramUrlInput = document.getElementById('instagramUrl');
+        const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
+        const downloadInstagramBtn = document.getElementById('downloadInstagramBtn');
+        const tiktokLoader = document.getElementById('tiktokLoader');
+        const instagramLoader = document.getElementById('instagramLoader');
+        const tiktokResult = document.getElementById('tiktokResult');
+        const instagramResult = document.getElementById('instagramResult');
+        const tiktokPreview = document.querySelector('#tiktokPreview video');
+        const instagramPreview = document.querySelector('#instagramPreview video');
+        const tiktokTitle = document.getElementById('tiktokTitle');
+        const instagramTitle = document.getElementById('instagramTitle');
+        const tiktokAuthor = document.getElementById('tiktokAuthor');
+        const instagramAuthor = document.getElementById('instagramAuthor');
+        const tiktokOptions = document.getElementById('tiktokOptions');
+        const instagramOptions = document.getElementById('instagramOptions');
+        const apiStatus = document.getElementById('apiStatus');
 
-        // Access Button - Direct to first section
-        accessBtn.addEventListener('click', () => {
-            menuToggle.classList.add('active');
-            sidebar.classList.add('active');
-            mainContent.classList.add('shifted');
-            
-            document.querySelectorAll('.nav-item').forEach(item => item.classList.remove('active'));
-            document.querySelector('.nav-item').classList.add('active');
-            
-            document.querySelectorAll('.content-section').forEach(section => section.classList.remove('active'));
-            document.getElementById('upload').classList.add('active');
-        });
+        // ========================
+        // FUNGSI UMUM
+        // ========================
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
 
-        // Navigation
-        const navItems = document.querySelectorAll('.nav-item');
-        
-        navItems.forEach(item => {
-            item.addEventListener('click', function() {
-                const target = this.getAttribute('data-target');
-                
-                navItems.forEach(navItem => navItem.classList.remove('active'));
-                this.classList.add('active');
-                
-                document.querySelectorAll('.content-section').forEach(section => {
-                    section.classList.remove('active');
-                });
-                document.getElementById(target).classList.add('active');
-                
-                if (window.innerWidth <= 768) {
-                    menuToggle.classList.remove('active');
-                    sidebar.classList.remove('active');
-                    mainContent.classList.remove('shifted');
+        function showError(message) {
+            alert(`Error: ${message}`);
+        }
+
+        // ========================
+        // UPLOAD GAMBAR KE IMGBB
+        // ========================
+        document.getElementById('uploadBtn').addEventListener('click', function() {
+            const fileInput = document.createElement('input');
+            fileInput.type = 'file';
+            fileInput.accept = 'image/*';
+            fileInput.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const formData = new FormData();
+                    formData.append('image', file);
+                    
+                    fetch(`https://api.imgbb.com/1/upload?key=${IMGBB_API_KEY}`, {
+                        method: 'POST',
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            alert(`Gambar berhasil diunggah! Link: ${data.data.url}`);
+                        } else {
+                            throw new Error(data.error.message || 'Upload gagal');
+                        }
+                    })
+                    .catch(error => {
+                        showError(`Upload gambar gagal: ${error.message}`);
+                    });
                 }
-            });
-        });
-
-        // Upload Image to Catbox
-        const uploadArea = document.getElementById('uploadArea');
-        const fileInput = document.getElementById('fileInput');
-        const uploadResult = document.getElementById('uploadResult');
-        const imageLink = document.getElementById('imageLink');
-        const copyLinkBtn = document.getElementById('copyLinkBtn');
-
-        uploadArea.addEventListener('click', () => {
+            };
             fileInput.click();
         });
 
-        fileInput.addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                // Show loading state
-                uploadArea.innerHTML = `
-                    <div class="upload-icon">
-                        <i class="fas fa-spinner fa-spin"></i>
-                    </div>
-                    <h3>Mengunggah ke Catbox...</h3>
-                `;
+        // ========================
+        // DOWNLOAD VIDEO TIKTOK
+        // ========================
+        downloadTiktokBtn.addEventListener('click', () => {
+            const url = tiktokUrlInput.value.trim();
+            
+            if (!url) {
+                showError('Silakan masukkan link TikTok terlebih dahulu');
+                return;
+            }
+            
+            if (!url.includes('tiktok.com')) {
+                showError('Link TikTok tidak valid');
+                return;
+            }
+            
+            // Show loader, hide result
+            tiktokLoader.style.display = 'block';
+            tiktokResult.style.display = 'none';
+            apiStatus.textContent = "Memproses video TikTok...";
+            
+            // Gunakan API TikTok dari RapidAPI
+            fetch(`https://tiktok-video-no-watermark2.p.rapidapi.com/?url=${encodeURIComponent(url)}&hd=1`, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                // Hide loader
+                tiktokLoader.style.display = 'none';
+                apiStatus.textContent = "Terhubung ke RapidAPI";
                 
-                // Simulate upload to Catbox
-                setTimeout(() => {
-                    // Generate Catbox-like link
-                    const randomId = Math.random().toString(36).substring(2, 10);
-                    const fileExt = file.name.split('.').pop().toLowerCase();
-                    const catboxLink = `https://files.catbox.moe/${randomId}.${fileExt}`;
+                if (data.code === 0) {
+                    const videoData = data.data;
+                    
+                    // Update video preview
+                    tiktokPreview.src = videoData.play;
+                    
+                    // Update video info
+                    tiktokTitle.textContent = videoData.title;
+                    tiktokAuthor.textContent = `@${videoData.author.unique_id}`;
+                    
+                    // Generate download options
+                    tiktokOptions.innerHTML = '';
+                    const formats = [
+                        { quality: 'HD', size: formatFileSize(videoData.size), url: videoData.play }
+                    ];
+                    
+                    formats.forEach(format => {
+                        const option = document.createElement('div');
+                        option.className = 'download-option';
+                        option.innerHTML = `
+                            <div class="quality">${format.quality}</div>
+                            <div class="size">${format.size}</div>
+                            <a href="${format.url}" download="tiktok_video.mp4" style="display: none;"></a>
+                        `;
+                        
+                        option.addEventListener('click', () => {
+                            const link = option.querySelector('a');
+                            if (link) {
+                                link.click();
+                            }
+                        });
+                        
+                        tiktokOptions.appendChild(option);
+                    });
                     
                     // Show result
-                    uploadArea.innerHTML = `
-                        <div class="upload-icon">
-                            <i class="fas fa-check-circle" style="color: #4CAF50;"></i>
-                        </div>
-                        <h3>Unggahan Berhasil!</h3>
-                        <p>Klik untuk mengunggah gambar lain</p>
-                        <button class="upload-btn">Unggah Lagi</button>
-                    `;
-                    
-                    // Show the Catbox link
-                    imageLink.textContent = catboxLink;
-                    imageLink.href = catboxLink;
-                    uploadResult.style.display = 'block';
-                }, 2000);
-            }
-        });
-
-        // Copy Link Button
-        copyLinkBtn.addEventListener('click', () => {
-            const link = imageLink.href;
-            navigator.clipboard.writeText(link).then(() => {
-                copyLinkBtn.innerHTML = '<i class="fas fa-check"></i> Tersalin!';
-                setTimeout(() => {
-                    copyLinkBtn.innerHTML = '<i class="fas fa-copy"></i> Salin Link';
-                }, 2000);
+                    tiktokResult.style.display = 'block';
+                } else {
+                    throw new Error(data.msg || 'Gagal mengambil data video');
+                }
+            })
+            .catch(error => {
+                tiktokLoader.style.display = 'none';
+                apiStatus.textContent = "Error: " + error.message;
+                showError(`Terjadi kesalahan: ${error.message}`);
             });
         });
 
-        // TikTok Download via Snaptik
-        const downloadTiktokBtn = document.getElementById('downloadTiktokBtn');
-        const tiktokResult = document.getElementById('tiktokResult');
-        const tiktokDownloadLink = document.getElementById('tiktokDownloadLink');
-
-        downloadTiktokBtn.addEventListener('click', () => {
-            const url = document.getElementById('tiktokUrl').value.trim();
-            
-            if (!url) {
-                alert('Silakan masukkan link TikTok terlebih dahulu');
-                return;
-            }
-            
-            // Extract video ID from URL
-            let videoId = '';
-            try {
-                const urlObj = new URL(url);
-                const pathParts = urlObj.pathname.split('/');
-                videoId = pathParts[pathParts.length - 1];
-            } catch (e) {
-                alert('Link TikTok tidak valid');
-                return;
-            }
-            
-            // Show loading state
-            downloadTiktokBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
-            
-            // Generate Snaptik URL
-            setTimeout(() => {
-                const snaptikUrl = `https://snaptik.app/en?url=${encodeURIComponent(url)}`;
-                
-                // Show result
-                tiktokDownloadLink.textContent = `Download via Snaptik (${videoId})`;
-                tiktokDownloadLink.href = snaptikUrl;
-                tiktokResult.style.display = 'block';
-                
-                // Reset button
-                downloadTiktokBtn.innerHTML = '<i class="fas fa-download"></i> Download via Snaptik';
-            }, 1500);
-        });
-
-        // Instagram Download via Snaptik
-        const downloadInstagramBtn = document.getElementById('downloadInstagramBtn');
-        const instagramResult = document.getElementById('instagramResult');
-        const instagramDownloadLink = document.getElementById('instagramDownloadLink');
-
+        // ========================
+        // DOWNLOAD VIDEO INSTAGRAM
+        // ========================
         downloadInstagramBtn.addEventListener('click', () => {
-            const url = document.getElementById('instagramUrl').value.trim();
+            const url = instagramUrlInput.value.trim();
             
             if (!url) {
-                alert('Silakan masukkan link Instagram terlebih dahulu');
+                showError('Silakan masukkan link Instagram terlebih dahulu');
                 return;
             }
             
-            // Extract post ID from URL
-            let postId = '';
-            try {
-                const urlObj = new URL(url);
-                postId = urlObj.pathname.split('/')[2];
-            } catch (e) {
-                alert('Link Instagram tidak valid');
+            if (!url.includes('instagram.com')) {
+                showError('Link Instagram tidak valid');
                 return;
             }
             
-            // Show loading state
-            downloadInstagramBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Memproses...';
+            // Show loader, hide result
+            instagramLoader.style.display = 'block';
+            instagramResult.style.display = 'none';
+            apiStatus.textContent = "Memproses video Instagram...";
             
-            // Generate Snaptik URL for Instagram
-            setTimeout(() => {
-                const snaptikUrl = `https://snaptik.app/instagram?url=${encodeURIComponent(url)}`;
+            // Gunakan API Instagram dari RapidAPI
+            fetch(`https://instagram-downloader-download-instagram-videos-stories.p.rapidapi.com/?url=${encodeURIComponent(url)}`, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'instagram-downloader-download-instagram-videos-stories.p.rapidapi.com'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                instagramLoader.style.display = 'none';
+                apiStatus.textContent = "Terhubung ke RapidAPI";
                 
-                // Show result
-                instagramDownloadLink.textContent = `Download via Snaptik (${postId})`;
-                instagramDownloadLink.href = snaptikUrl;
-                instagramResult.style.display = 'block';
-                
-                // Reset button
-                downloadInstagramBtn.innerHTML = '<i class="fas fa-download"></i> Download via Snaptik';
-            }, 1500);
+                if (data.status === 'success') {
+                    // Update video preview
+                    instagramPreview.src = data.video;
+                    
+                    // Update video info
+                    instagramTitle.textContent = data.title || 'Video Instagram';
+                    instagramAuthor.textContent = data.author || '@unknown';
+                    
+                    // Generate download options
+                    instagramOptions.innerHTML = '';
+                    const formats = [
+                        { quality: 'Default', size: formatFileSize(data.size), url: data.video }
+                    ];
+                    
+                    formats.forEach(format => {
+                        const option = document.createElement('div');
+                        option.className = 'download-option';
+                        option.innerHTML = `
+                            <div class="quality">${format.quality}</div>
+                            <div class="size">${format.size}</div>
+                            <a href="${format.url}" download="instagram_video.mp4" style="display: none;"></a>
+                        `;
+                        
+                        option.addEventListener('click', () => {
+                            const link = option.querySelector('a');
+                            if (link) {
+                                link.click();
+                            }
+                        });
+                        
+                        instagramOptions.appendChild(option);
+                    });
+                    
+                    // Show result
+                    instagramResult.style.display = 'block';
+                } else {
+                    throw new Error(data.message || 'Gagal mengambil data video');
+                }
+            })
+            .catch(error => {
+                instagramLoader.style.display = 'none';
+                apiStatus.textContent = "Error: " + error.message;
+                showError(`Terjadi kesalahan: ${error.message}`);
+            });
         });
 
-        // Initialize first section
-        document.querySelector('.nav-item').click();
+        // ========================
+        // WHATSAPP CHANNEL
+        // ========================
+        document.getElementById('whatsappBtn').addEventListener('click', () => {
+            window.open('https://whatsapp.com/channel/0029Vaqe6AA5PO13FUcYkJ3b', '_blank');
+        });
+
+        // ========================
+        // INISIALISASI
+        // ========================
+        // Cek koneksi API
+        function checkAPIStatus() {
+            fetch(`https://tiktok-video-no-watermark2.p.rapidapi.com/`, {
+                method: 'GET',
+                headers: {
+                    'X-RapidAPI-Key': RAPIDAPI_KEY,
+                    'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com'
+                }
+            })
+            .then(response => {
+                if (response.status === 200) {
+                    apiStatus.textContent = "Terhubung ke RapidAPI";
+                    apiStatus.className = "status-connected";
+                } else {
+                    apiStatus.textContent = "Error: API tidak merespon";
+                    apiStatus.className = "status-disconnected";
+                }
+            })
+            .catch(error => {
+                apiStatus.textContent = "Error: " + error.message;
+                apiStatus.className = "status-disconnected";
+            });
+        }
+        
+        // Jalankan pengecekan status saat halaman dimuat
+        checkAPIStatus();
     </script>
 </body>
 </html>
